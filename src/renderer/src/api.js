@@ -9,7 +9,7 @@
  * Set BASE_URL to wherever your Express server is running.
  */
 
-const BASE_URL = import.meta.env?.VITE_API_URL || 'http://localhost:3000/api'
+const BASE_URL = import.meta.env?.VITE_API_URL || 'http://192.168.100.167:3000/api'
 
 // ─────────────────────────────────────────────
 // Token helpers  (stored in localStorage)
