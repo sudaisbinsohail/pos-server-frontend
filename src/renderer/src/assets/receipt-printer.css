@@ -1,0 +1,123 @@
+/* ===== PAGE ===== */
+@page {
+  size: 80mm auto;
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== BASE ===== */
+.receipt {
+  width: 80mm;
+  padding: 4px;
+  margin: 0 auto;
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  color: #000;
+}
+
+/* ===== HEADER ===== */
+.receipt-header {
+  text-align: center;
+  border-bottom: 1px solid #000;
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+}
+
+.receipt-header h1 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.receipt-title {
+  font-size: 100px;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+/* ===== INFO ===== */
+.receipt-info {
+  border-bottom: 1px dashed #000;
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+}
+
+.receipt-info div {
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 0;
+}
+
+/* ===== TABLE ===== */
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.items-table th {
+  font-size: 10px;
+  border-bottom: 1px solid #000;
+}
+
+.items-table th,
+.items-table td {
+  padding: 2px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.col-item { width: 45%; text-align: left; word-break: break-word; }
+.col-qty { width: 15%; text-align: center; }
+.col-price { width: 20%; text-align: right; }
+.col-total { width: 20%; text-align: right; }
+
+/* ===== TOTALS ===== */
+.totals {
+  border-top: 1px solid #000;
+  margin-top: 6px;
+  padding-top: 6px;
+}
+
+.totals div {
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 0;
+}
+
+.discount { color: #000; }
+
+.grand-total {
+  font-size: 14px;
+  border-top: 1px solid #000;
+  margin-top: 4px;
+  padding-top: 4px;
+}
+
+/* ===== PAYMENT ===== */
+.payment {
+  border-top: 1px dashed #000;
+  margin-top: 6px;
+  padding-top: 6px;
+}
+
+.payment div {
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 0;
+}
+
+.change {
+  font-size: 12px;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  border-top: 1px dashed #000;
+  margin-top: 8px;
+  padding-top: 6px;
+  text-align: center;
+  font-size: 10px;
+}
