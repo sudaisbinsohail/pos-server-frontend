@@ -1,5 +1,5 @@
 const db = require('../models')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const { User, Company , Role , Permission} = db
 const Store = require('electron-store')
 const { Op } = require('sequelize')
