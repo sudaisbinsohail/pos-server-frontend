@@ -8,11 +8,11 @@ module.exports = (sequelize, DataTypes) => {
 
   Brand.init(
     {
-      uuid: {
+      id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
-        allowNull: false,
-        unique: true
+        primaryKey: true,
+        allowNull: false
       },
       brandName: {
         type: DataTypes.STRING,

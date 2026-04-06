@@ -84,7 +84,7 @@ export default function Users() {
         name, 
         email, 
         password, 
-        role_id: parseInt(roleId) 
+        role_id: roleId
       })
     ).unwrap();
     

@@ -4,7 +4,8 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import registerIpcHandlers from './ipc'
 import { loadDevTools } from './utils/devtools'
-// import { initializeDatabase } from './databse'
+import { initializeDatabase } from './databse'
+const syncService = require('../../controllers/syncService')
 
 function createWindow() {
   // Create the browser window.
@@ -45,7 +46,7 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(async() => {
   // Set app user model id for windows
   registerIpcHandlers()
   loadDevTools()
@@ -58,6 +59,7 @@ app.whenReady().then(() => {
   })
 
   createWindow()
+  await syncService.start('http://192.168.100.197:3000') 
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the

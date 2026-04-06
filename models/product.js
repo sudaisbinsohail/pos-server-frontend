@@ -10,17 +10,13 @@ module.exports = (sequelize, DataTypes) => {
   Product.init(
     {
       id: {
-        type: DataTypes.BIGINT,
-        primaryKey: true,
-        autoIncrement: true
-      },
-
-      uuid: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
-        allowNull: false,
-        unique: true
+        primaryKey: true,
+        allowNull: false
       },
+
+
 
       name: {
         type: DataTypes.STRING,
@@ -107,7 +103,8 @@ module.exports = (sequelize, DataTypes) => {
       deletedAt: {
         type: DataTypes.DATE,
         allowNull: true
-      }
+      },
+      
     },
     {
       sequelize,

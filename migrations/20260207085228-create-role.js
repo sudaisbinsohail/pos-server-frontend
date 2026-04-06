@@ -1,53 +1,14 @@
-// 'use strict';
-// /** @type {import('sequelize-cli').Migration} */
-// module.exports = {
-//   async up(queryInterface, Sequelize) {
-//     await queryInterface.createTable('Roles', {
-//       id: {
-//         allowNull: false,
-//         autoIncrement: true,
-//         primaryKey: true,
-//         type: Sequelize.INTEGER
-//       },
-//       roleName: {
-//         type: Sequelize.STRING
-//       },
-//       createdAt: {
-//         allowNull: false,
-//         type: Sequelize.DATE
-//       },
-//       updatedAt: {
-//         allowNull: false,
-//         type: Sequelize.DATE
-//       }
-//     });
-//   },
-//   async down(queryInterface, Sequelize) {
-//     await queryInterface.dropTable('Roles');
-//   }
-// };
-
-
-
-
 'use strict'
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('roles', {
-      id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false
-      },
-
-      uuid: {
+    id: {
         type: Sequelize.UUID,
-        allowNull: false,
-        unique: true,
-        defaultValue: Sequelize.UUIDV4
+        defaultValue: Sequelize.UUIDV4,
+        primaryKey: true,
+        allowNull: false
       },
 
       name: {

@@ -3,17 +3,13 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Products', {
-      id: {
-        type: Sequelize.BIGINT,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      uuid: {
+     id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
-        allowNull: false,
-        unique: true
+        primaryKey: true,
+        allowNull: false
       },
+
       name: {
         type: Sequelize.STRING,
         allowNull: false
@@ -24,21 +20,21 @@ module.exports = {
         unique: true
       },
       category_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: true,
         references: { model: 'Categories', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
       brand_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: true,
         references: { model: 'Brands', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
       base_unit_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: false,
         references: { model: 'Units', key: 'id' },
         onUpdate: 'CASCADE',
@@ -89,7 +85,7 @@ module.exports = {
         defaultValue: 'active'
       },
       user_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: false,
         references: { model: 'Users', key: 'id' },
         onUpdate: 'CASCADE',

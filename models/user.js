@@ -10,15 +10,15 @@ module.exports = (sequelize, DataTypes) => {
 
   User.init(
     {
-      uuid: {
+      id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
-        allowNull: false,
-        unique: true
+        primaryKey: true,
+        allowNull: false
       },
 
       company_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false,
         references: {
           model: 'Companies',
@@ -73,7 +73,7 @@ module.exports = (sequelize, DataTypes) => {
 
 
        role_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false,
         references: {
           model: 'roles',

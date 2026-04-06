@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
 
   Sale.init(
     {
-      uuid: {
+      id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
-        allowNull: false,
-        unique: true
+        primaryKey: true,
+        allowNull: false
       },
       invoice_number: {
         type: DataTypes.STRING,

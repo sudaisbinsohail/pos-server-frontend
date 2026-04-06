@@ -11,6 +11,12 @@ module.exports = (sequelize) => {
 
   Supplier.init(
     {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        allowNull: false
+      },
       supplierName: {
         type: DataTypes.STRING,
         allowNull: false,
