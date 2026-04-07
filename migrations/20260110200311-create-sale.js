@@ -48,7 +48,7 @@ module.exports = {
         unique: true
       },
       customer_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: true,
         references: {
           model: 'customers',
@@ -58,7 +58,7 @@ module.exports = {
         onDelete: 'SET NULL'
       },
       user_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
           model: 'Users',

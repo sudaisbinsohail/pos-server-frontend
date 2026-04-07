@@ -20,15 +20,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       sale_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false
       },
       product_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false
       },
       unit_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: true
       },
       product_name: {

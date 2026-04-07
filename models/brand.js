@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 1
       },
       user_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false
       },
       sortOrder: {

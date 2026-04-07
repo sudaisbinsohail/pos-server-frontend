@@ -121,7 +121,8 @@ useEffect(() => {
           // setCurrency(company.currency); // ⭐ important
         }
       } catch (err) {
-        toast.error("Failed to load company currency");
+        toast.error(err);
+        console.log(err)
       }
     }
 

@@ -23,11 +23,11 @@ module.exports = (sequelize, DataTypes) => {
         unique: true
       },
       customer_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: true
       },
       user_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false
       },
       sale_date: {
@@ -39,6 +39,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
         defaultValue: 0
+      },
+        terminal_id: {
+        type: DataTypes.UUID,
+        allowNull: true
+      },
+      store_id: {
+        type: DataTypes.UUID,
+        allowNull: true
       },
       tax_amount: {
         type: DataTypes.DECIMAL(10, 2),

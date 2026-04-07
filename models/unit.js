@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         unique: true
       },
       base_unit_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: true
       },
       universal_conversion: {
@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true
       },
       user_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: true
       },
       created_by: {

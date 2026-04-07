@@ -43,7 +43,7 @@ module.exports = {
       },
 
       sale_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
           model: 'sales',
@@ -53,7 +53,7 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       product_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
           model: 'Products',
@@ -63,7 +63,7 @@ module.exports = {
         onDelete: 'SET NULL'
       },
       unit_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: true,
         references: {
           model: 'Units',

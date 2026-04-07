@@ -86,7 +86,7 @@ module.exports = {
         unique: true
       },
       base_unit_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: true,
         references: { model: 'Units', key: 'id' },
         onUpdate: 'CASCADE',
@@ -106,7 +106,7 @@ module.exports = {
         allowNull: true
       },
       user_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: true,
         references: { model: 'Users', key: 'id' },
         onUpdate: 'CASCADE',

@@ -14,6 +14,8 @@ module.exports = (db) => {
     User,
     Role,
     Permission,
+    Store,
+    Terminal,
     RolePermission
   } = db;
   
@@ -162,6 +164,38 @@ module.exports = (db) => {
     otherKey: 'role_id',
     as: 'roles'
   });
+
+  // Company has many Stores
+  Company.hasMany(Store, { foreignKey: 'company_id', as: 'stores' })
+  Store.belongsTo(Company, { foreignKey: 'company_id', as: 'company' })
+ 
+  // User created/owns many Stores
+  User.hasMany(Store, { foreignKey: 'user_id', as: 'createdStores' })
+  Store.belongsTo(User, { foreignKey: 'user_id', as: 'creator' })
+ 
+  // Store has many Terminals
+  Store.hasMany(Terminal, { foreignKey: 'store_id', as: 'terminals' })
+  Terminal.belongsTo(Store, { foreignKey: 'store_id', as: 'store' })
+ 
+  // Store has many Sales
+  Store.hasMany(Sale, { foreignKey: 'store_id', as: 'sales' })
+  Sale.belongsTo(Store, { foreignKey: 'store_id', as: 'store' })
+ 
+  // ==============================
+  // TERMINAL ASSOCIATIONS
+  // ==============================
+ 
+  // User who registered this terminal
+  User.hasMany(Terminal, { foreignKey: 'user_id', as: 'createdTerminals' })
+  Terminal.belongsTo(User, { foreignKey: 'user_id', as: 'createdBy' })
+ 
+  // User currently assigned to a terminal (the active cashier)
+  User.hasMany(Terminal, { foreignKey: 'assigned_user_id', as: 'assignedTerminals' })
+  Terminal.belongsTo(User, { foreignKey: 'assigned_user_id', as: 'assignedUser' })
+ 
+  // Terminal has many Sales
+  Terminal.hasMany(Sale, { foreignKey: 'terminal_id', as: 'sales' })
+  Sale.belongsTo(Terminal, { foreignKey: 'terminal_id', as: 'terminal' })
 
 
 };

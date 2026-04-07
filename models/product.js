@@ -30,17 +30,17 @@ module.exports = (sequelize, DataTypes) => {
       },
 
       category_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: true
       },
 
       brand_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: true
       },
 
       base_unit_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false
       },
       image: DataTypes.STRING,
@@ -90,7 +90,7 @@ module.exports = (sequelize, DataTypes) => {
       },
 
       user_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false
       },
 
