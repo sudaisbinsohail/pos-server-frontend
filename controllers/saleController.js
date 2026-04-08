@@ -292,6 +292,7 @@
 const db = require('../models')
 const { Sale, SaleItem, Customer, Product, Unit, User } = db
 const { Op } = require('sequelize')
+const {pushSaleNow} = require('./syncService')
 
 module.exports = {
   /* =======================================================
@@ -390,6 +391,16 @@ module.exports = {
       }
 
       await transaction.commit()
+     try {
+  const result = await pushSaleNow(sale.id)
+  if (result.offline) {
+    console.log('Sale saved locally, will sync when online')
+  }
+} catch (e) {
+  console.error('Push error:', e.message)
+}
+
+
 
       return { success: true, sale, invoice_number }
     } catch (err) {

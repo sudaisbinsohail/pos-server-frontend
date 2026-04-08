@@ -238,8 +238,8 @@
 'use strict'
 
 const db = require('../models')
-const { Product, ProductUnit, Unit, Category, Brand, User, Role, Permission, Company, RolePermission } = db
-const { DataTypes } = require('sequelize')
+const { Product, ProductUnit, Unit, Category, Brand, User, Role, Permission, Company, RolePermission ,Sale , SaleItem} = db
+const { DataTypes ,Op} = require('sequelize')
 const { io } = require('socket.io-client')
 
 // ── SyncMeta ──────────────────────────────────────────────────────────────────
@@ -273,6 +273,14 @@ const TABLES = [
   },
   { endpoint: '/api/sync/rolepermissions', metaKey: 'lastRolePermissionSync', model: RolePermission },
   { endpoint: '/api/sync/productunit',     metaKey: 'lastProductUnitSync',    model: ProductUnit },
+  // In the TABLES array, add:
+{ endpoint: '/api/sync/sales',      metaKey: 'lastSaleSync',     model: Sale,
+  children: { items: SaleItem },
+  stripKeys: ['items', 'customer', 'cashier']
+},
+{ endpoint: '/api/sync/saleitems',  metaKey: 'lastSaleItemSync', model: SaleItem,
+  stripKeys: ['product', 'unit']
+},
 ]
 
 // Socket.IO real-time table config
@@ -288,6 +296,8 @@ const RT_TABLES = [
   { name: 'permission',     model: Permission,      metaKey: 'lastPermissionSync',     children: {} },
   { name: 'rolepermission', model: RolePermission,  metaKey: 'lastRolePermissionSync', children: {} },
   { name: 'product',        model: Product,         metaKey: 'lastProductSync',        children: { units: ProductUnit } },
+  // In RT_TABLES array, add:
+{ name: 'sale', model: Sale, metaKey: 'lastSaleSync', children: { items: SaleItem } },
 ]
 
 // async function _pullTable({ endpoint, metaKey, model }) {
@@ -320,6 +330,198 @@ const RT_TABLES = [
 //     console.error(`[Sync] ❌ ${model.name}:`, err.name === 'AbortError' ? 'timed out' : err.message)
 //   }
 // }
+// Add Sale and SaleItem to the top destructure:
+
+
+// Add this function:
+// async function _pushSales() {
+//   const since = await _getMeta('lastSalePush')
+//   const where = since ? { updatedAt: { [Op.gt]: new Date(since) } } : {}
+
+//   const sales = await Sale.findAll({
+//     where,
+//     include: [{ model: SaleItem, as: 'items', paranoid: false }],
+//     paranoid: false,
+//     order: [['updatedAt', 'ASC']]
+//   })
+//   console.log("this is a sale ====================",sales)
+
+//   if (!sales.length) { console.log('[Sync] No local sales to push'); return }
+
+//   console.log(`[Sync] Pushing ${sales.length} sale(s) to server…`)
+
+//   for (const sale of sales) {
+//     const plain = sale.get({ plain: true })
+//     try {
+//       const res = await fetch(`${_baseUrl}/api/sync/push/sale`, {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify(plain)
+//       })
+//       const json = await res.json()
+//       if (!json.success) console.error('[Sync] Push sale failed:', json.error)
+//     } catch (e) {
+//       console.error('[Sync] Push sale error:', e.message)
+//     }
+//   }
+
+//   await _setMeta('lastSalePush', new Date().toISOString())
+//   console.log(`[Sync] ✅ Pushed ${sales.length} sale(s)`)
+// }
+
+
+async function _pushSales() {
+  const since = await _getMeta('lastSalePush')
+  const { Op } = require('sequelize')
+  const where = since ? { updatedAt: { [Op.gt]: new Date(since) } } : {}
+
+  let sales
+  try {
+    sales = await Sale.findAll({
+      where,
+      include: [{ model: SaleItem, as: 'items', paranoid: false }],
+      paranoid: false,
+      order: [['updatedAt', 'ASC']]
+    })
+  } catch (e) {
+    console.error('[Sync] _pushSales query failed:', e.message)
+    return
+  }
+
+  if (!sales.length) {
+    console.log('[Sync] No local sales to push')
+    return
+  }
+
+  console.log(`[Sync] Pushing ${sales.length} sale(s) to server…`)
+
+  let successCount = 0
+
+  for (const sale of sales) {
+    // Use get({ plain: true }) to get a clean plain object
+    const plain = sale.get({ plain: true })
+
+    // Separate items BEFORE stripping
+    const items = (plain.items || []).map(item => {
+      const cleanItem = { ...item }
+      delete cleanItem.product
+      delete cleanItem.unit
+      delete cleanItem.sale
+      return cleanItem
+    })
+
+    // Clean the sale row
+    const saleRow = { ...plain }
+    delete saleRow.items
+    delete saleRow.customer
+    delete saleRow.cashier
+
+    const payload = { ...saleRow, items }
+
+    try {
+      const res = await fetch(`${_baseUrl}/api/sync/push/sale`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+
+      // Check content type before parsing
+      const contentType = res.headers.get('content-type') || ''
+      if (!contentType.includes('application/json')) {
+        const text = await res.text()
+        console.error('[Sync] Push sale — server returned non-JSON:', text.slice(0, 300))
+        continue
+      }
+
+      const json = await res.json()
+
+      if (!json.success) {
+        console.error(`[Sync] Push sale failed [${plain.invoice_number}]:`, json.error)
+        continue
+      }
+
+      successCount++
+      console.log(`[Sync] ✅ Sale pushed: ${plain.invoice_number}`)
+
+    } catch (e) {
+      console.error(`[Sync] Push sale network error [${plain.invoice_number}]:`, e.message)
+      break  // stop on network error, retry next connect
+    }
+  }
+
+  if (successCount > 0) {
+    await _setMeta('lastSalePush', new Date().toISOString())
+    console.log(`[Sync] ✅ Pushed ${successCount}/${sales.length} sale(s)`)
+  } else {
+    console.warn('[Sync] ⚠️ 0 sales pushed successfully — will retry on next connect')
+    // Do NOT update lastSalePush so they get retried
+  }
+}
+
+// Single sale push — call this right after creating a sale locally
+async function pushSaleNow(saleId) {
+  if (!_baseUrl || !_ws?.connected) {
+    console.log('[Sync] Offline — sale will sync on next reconnect')
+    return { success: false, offline: true }
+  }
+
+  try {
+    const sale = await Sale.findByPk(saleId, {
+      include: [{ model: SaleItem, as: 'items', paranoid: false }],
+      paranoid: false
+    })
+
+    if (!sale) {
+      console.error('[Sync] pushSaleNow — sale not found:', saleId)
+      return { success: false, error: 'Sale not found' }
+    }
+
+    const plain = sale.get({ plain: true })
+
+    const items = (plain.items || []).map(item => {
+      const clean = { ...item }
+      delete clean.product
+      delete clean.unit
+      delete clean.sale
+      return clean
+    })
+
+    const saleRow = { ...plain }
+    delete saleRow.items
+    delete saleRow.customer
+    delete saleRow.cashier
+
+    const payload = { ...saleRow, items }
+
+    const res = await fetch(`${_baseUrl}/api/sync/push/sale`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+
+    const contentType = res.headers.get('content-type') || ''
+    if (!contentType.includes('application/json')) {
+      const text = await res.text()
+      console.error('[Sync] pushSaleNow — non-JSON response:', text.slice(0, 300))
+      return { success: false, error: 'Bad server response' }
+    }
+
+    const json = await res.json()
+    if (!json.success) {
+      console.error('[Sync] pushSaleNow failed:', json.error)
+      return { success: false, error: json.error }
+    }
+
+    // Update lastSalePush so _pushSales skips this sale on next reconnect
+    await _setMeta('lastSalePush', new Date().toISOString())
+    console.log(`[Sync] ✅ Real-time push: ${plain.invoice_number}`)
+    return { success: true }
+
+  } catch (e) {
+    console.error('[Sync] pushSaleNow error:', e.message)
+    return { success: false, error: e.message }
+  }
+}
 
 
 async function _pullTable({ endpoint, metaKey, model, children = {}, stripKeys = [] }) {
@@ -380,6 +582,7 @@ async function _pullTable({ endpoint, metaKey, model, children = {}, stripKeys =
 
 async function _pullAll() {
   for (const t of TABLES) await _pullTable(t)
+  await _pushSales()
 }
 
 // ── Real-time listeners ───────────────────────────────────────────────────────
@@ -459,4 +662,4 @@ function stop() {
   console.log('[Sync] Stopped.')
 }
 
-module.exports = { start, stop }
+module.exports = { start, stop ,pushSaleNow}
