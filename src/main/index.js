@@ -59,7 +59,7 @@ app.whenReady().then(async() => {
   })
 
   createWindow()
-  await syncService.start('http://192.168.100.197:3000') 
+  await syncService.start('http://192.168.1.24:3000') 
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
