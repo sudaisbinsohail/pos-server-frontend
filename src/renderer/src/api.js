@@ -9,7 +9,7 @@
  * Set BASE_URL to wherever your Express server is running.
  */
 
-const BASE_URL = import.meta.env?.VITE_API_URL || 'http://192.168.1.24:3000/api'
+const BASE_URL = import.meta.env?.VITE_API_URL || 'http://10.248.41.66:3000/api'
 
 // ─────────────────────────────────────────────
 // Token helpers  (stored in localStorage)
@@ -234,6 +234,38 @@ const sales = {
   delete:  (id)     => del(`/sales/${id}`),
 }
 
+
+
+// ─────────────────────────────────────────────
+// STORES
+// ─────────────────────────────────────────────
+const stores = {
+  list: (filters) => {
+    const q = new URLSearchParams(filters || {}).toString()
+    return get(`/stores${q ? '?' + q : ''}`)
+  },
+  create:  (data)      => post('/stores', data),
+  getById: (id)        => get(`/stores/${id}`),
+  update:  (id, data)  => put(`/stores/${id}`, data),
+  delete:  (id)        => del(`/stores/${id}`),
+}
+ 
+// ─────────────────────────────────────────────
+// TERMINALS
+// ─────────────────────────────────────────────
+const terminals = {
+  list: (filters) => {
+    const q = new URLSearchParams(filters || {}).toString()
+    return get(`/terminals${q ? '?' + q : ''}`)
+  },
+  listByStore: (storeId)     => get(`/terminals/store/${storeId}`),
+  create:      (data)        => post('/terminals', data),
+  getById:     (id)          => get(`/terminals/${id}`),
+  update:      (id, data)    => put(`/terminals/${id}`, data),
+  delete:      (id)          => del(`/terminals/${id}`),
+  assignUser:  (id, user_id) => patch(`/terminals/${id}/assign`, { user_id }),
+}
+
 // ─────────────────────────────────────────────
 // Helper: Build FormData from plain object.
 // jsonFields: array of keys whose values should
@@ -353,6 +385,24 @@ const api = {
   getSalesStats:      sales.stats,
   getSaleById:        sales.getById,
   deleteSale:         sales.delete,
+
+
+
+    // Stores  ← NEW
+  listStores:         stores.list,
+  createStore:        stores.create,
+  getStoreById:       stores.getById,
+  updateStore:        stores.update,
+  deleteStore:        stores.delete,
+ 
+  // Terminals  ← NEW
+  listTerminals:          terminals.list,
+  listTerminalsByStore:   terminals.listByStore,
+  createTerminal:         terminals.create,
+  getTerminalById:        terminals.getById,
+  updateTerminal:         terminals.update,
+  deleteTerminal:         terminals.delete,
+  assignUserToTerminal:   terminals.assignUser,
 
   // Token management (call after login)
   setToken,

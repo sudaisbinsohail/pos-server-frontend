@@ -117,7 +117,9 @@ export default function Dashboard() {
       children: [
         { name: 'Users',              path: '/dashboard/users',           permission: 'tab.users' },
         { name: 'Company',            path: '/dashboard/settingCompany',  permission: 'tab.company' },
-        { name: 'Roles & Permissions',path: '/dashboard/roles',           permission: 'tab.roles' }
+        { name: 'Roles & Permissions',path: '/dashboard/roles',           permission: 'tab.roles' },
+        { name: 'Stores',path: '/dashboard/stores',           permission: 'tab.roles' },
+        { name: 'Terminals',path: '/dashboard/terminals',           permission: 'tab.roles' }
       ]
     }
   ]

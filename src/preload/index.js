@@ -9,9 +9,9 @@ const api = {
 
 
   checkAdmin: () => ipcRenderer.invoke('check:admin'),
-  // createUser: (data) => ipcRenderer.invoke('user:create', data),
+  createUser: (data) => ipcRenderer.invoke('user:create', data),
   createCompany: (data) => ipcRenderer.invoke('company:create', data),
-  // listUsers: (filter) => ipcRenderer.invoke('user:list', filter),
+  listUsers: (filter) => ipcRenderer.invoke('user:list', filter),
   authUser: (email, password) => ipcRenderer.invoke('user:auth', email, password),
   userSession: (user) => ipcRenderer.invoke('user:session', user),
   getUserSession: () => ipcRenderer.invoke('user:getSession'),
@@ -76,24 +76,24 @@ deleteSale: (id) => ipcRenderer.invoke('delete-sale', id),
 getSalesStats: (filters) => ipcRenderer.invoke('get-sales-stats', filters),
 
 
-//  // Role APIs
-//   createRole: (data) => ipcRenderer.invoke('role:create', data),
-//   updateRole: (id, data) => ipcRenderer.invoke('role:update', id, data),
-//   deleteRole: (id) => ipcRenderer.invoke('role:delete', id),
-//   getRoleById: (id) => ipcRenderer.invoke('role:getById', id),
-//   getRoles: (filters) => ipcRenderer.invoke('role:getAll', filters),
-//   assignPermissions: (roleId, permissionIds) => ipcRenderer.invoke('role:assignPermissions', roleId, permissionIds),
-//   checkPermission: (userId, permissionSlug) => ipcRenderer.invoke('role:checkPermission', userId, permissionSlug),
-//   getUserPermissions: (userId) => ipcRenderer.invoke('role:getUserPermissions', userId),
+ // Role APIs
+  createRole: (data) => ipcRenderer.invoke('role:create', data),
+  updateRole: (id, data) => ipcRenderer.invoke('role:update', id, data),
+  deleteRole: (id) => ipcRenderer.invoke('role:delete', id),
+  getRoleById: (id) => ipcRenderer.invoke('role:getById', id),
+  getRoles: (filters) => ipcRenderer.invoke('role:getAll', filters),
+  assignPermissions: (roleId, permissionIds) => ipcRenderer.invoke('role:assignPermissions', roleId, permissionIds),
+  checkPermission: (userId, permissionSlug) => ipcRenderer.invoke('role:checkPermission', userId, permissionSlug),
+  getUserPermissions: (userId) => ipcRenderer.invoke('role:getUserPermissions', userId),
 
-//   // Permission APIs
-//   createPermission: (data) => ipcRenderer.invoke('permission:create', data),
-//   updatePermission: (id, data) => ipcRenderer.invoke('permission:update', id, data),
-//   deletePermission: (id) => ipcRenderer.invoke('permission:delete', id),
-//   getPermissionById: (id) => ipcRenderer.invoke('permission:getById', id),
-//   getPermissions: () => ipcRenderer.invoke('permission:getAll'),
-//   getPermissionsGrouped: () => ipcRenderer.invoke('permission:getGrouped'),
-//   seedPermissions: () => ipcRenderer.invoke('permission:seed'),
+  // Permission APIs
+  createPermission: (data) => ipcRenderer.invoke('permission:create', data),
+  updatePermission: (id, data) => ipcRenderer.invoke('permission:update', id, data),
+  deletePermission: (id) => ipcRenderer.invoke('permission:delete', id),
+  getPermissionById: (id) => ipcRenderer.invoke('permission:getById', id),
+  getPermissions: () => ipcRenderer.invoke('permission:getAll'),
+  getPermissionsGrouped: () => ipcRenderer.invoke('permission:getGrouped'),
+  seedPermissions: () => ipcRenderer.invoke('permission:seed'),
 
 
  printReceipt: (html) => ipcRenderer.send('print-receipt', html),

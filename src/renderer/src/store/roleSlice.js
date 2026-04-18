@@ -1,3 +1,6 @@
+//embedded db
+
+
 // import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // // ======================================================
@@ -182,7 +185,7 @@
 // export const { clearCurrentRole, clearError } = roleSlice.actions;
 // export default roleSlice.reducer;
 
-
+//server side role
 
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";

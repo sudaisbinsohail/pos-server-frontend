@@ -2,7 +2,7 @@
 'use strict'
 
 const db = require('../models')
-const { Product, ProductUnit, Unit, Category, Brand, User, Role, Permission, Company, RolePermission ,Sale , SaleItem} = db
+const { Product, ProductUnit, Unit, Category, Brand, User, Role, Permission, Company, RolePermission ,Sale , SaleItem , Store , Terminal} = db
 const { DataTypes ,Op} = require('sequelize')
 const { io } = require('socket.io-client')
 
@@ -45,6 +45,10 @@ const TABLES = [
 { endpoint: '/api/sync/saleitems',  metaKey: 'lastSaleItemSync', model: SaleItem,
   stripKeys: ['product', 'unit']
 },
+
+// ── NEW ──
+  { endpoint: '/api/sync/stores',     metaKey: 'lastStoreSync',     model: Store,     stripKeys: ['terminals', 'company', 'creator'] },
+  { endpoint: '/api/sync/terminals',  metaKey: 'lastTerminalSync',  model: Terminal,  stripKeys: ['store', 'assignedUser', 'createdBy', 'sales'] },
 ]
 
 // Socket.IO real-time table config
@@ -62,6 +66,9 @@ const RT_TABLES = [
   { name: 'product',        model: Product,         metaKey: 'lastProductSync',        children: { units: ProductUnit } },
   // In RT_TABLES array, add:
 { name: 'sale', model: Sale, metaKey: 'lastSaleSync', children: { items: SaleItem } },
+ // ── NEW ──
+  { name: 'store',          model: Store,          metaKey: 'lastStoreSync',          children: {} },
+  { name: 'terminal',       model: Terminal,       metaKey: 'lastTerminalSync',       children: {} },
 ]
 
 

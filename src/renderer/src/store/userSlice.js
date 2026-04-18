@@ -1,4 +1,8 @@
 
+
+//local user creation
+
+
 // import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 
@@ -86,6 +90,13 @@
 // });
 
 // export default userSlice.reducer;
+
+
+
+
+/// server user creation
+
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api, { setToken, removeToken } from "../api";
 

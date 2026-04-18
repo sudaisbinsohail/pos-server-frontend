@@ -21,6 +21,8 @@ import RoleManagement from "./pages/RolesPermissions";
 import { checkCompanySlice } from "./store/companySlice";
 import { checkAdminExists } from "./store/userSlice";
 import { getProfile } from "./store/userSlice";
+import Stores from "./pages/Stores";
+import Terminals from "./pages/Terminals";
 
 export default function App() {
   const [initialRoute, setInitialRoute] = useState(null);
@@ -104,6 +106,8 @@ export default function App() {
           <Route path="unit" element={<Units />} />
           <Route path="settingCompany" element={<SettingCompany />} />
           <Route path="roles" element={<RoleManagement />} />
+          <Route path="stores" element={<Stores />} />
+          <Route path="terminals" element={<Terminals />} />
 
         </Route>
 
